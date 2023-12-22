@@ -7,7 +7,5 @@
 			"path": ".."
 		}
 	],
-	"settings": {
-		"liveServer.settings.multiRootWorkspaceName": "code_space"
-	}
+	"settings": {}
 }

@@ -41,11 +41,11 @@ app.get('/', (req, res) => {
     .then(todos => res.render('index', { todos:todos })) // 取得陣列叫todos，將資料傳給 index 樣板
     .catch(error => console.error(error)) // 錯誤處理
 })
-// 進入 New To do
+// 建立新Todo - 進入 New To do
 app.get('/todos/new', (req, res) => {
   return res.render('new')
 })
-// 在 New 按送出：接住表單資料，把資料送往資料庫。這個步驟就是 CRUD 裡的 Create 動作。
+// 建立新Todo - 送出按鈕，接住表單資料，把資料送往資料庫。這個步驟就是 CRUD 裡的 Create 動作。
 app.post('/todos', (req, res) => {
   const name = req.body.name
   const todo = new Todo({name: name})  //資料庫的model在伺服器端的實體
@@ -54,6 +54,15 @@ app.post('/todos', (req, res) => {
   return todo.save()
   .then(todo => res.redirect('/'))
   .catch(error => console.error(error))
+})
+
+//點選Detail - 進入detail頁面
+app.get('/todos/:id', (req, res) => {  //動態參數
+  const id = req.params.id 
+  return Todo.findById(id)
+    .lean()
+    .then((todo) => res.render('detail', { todo:todo })) //todo為抓出來的那筆資料
+    .catch(error => console.log(error))
 })
 
 // Listen the server when it started

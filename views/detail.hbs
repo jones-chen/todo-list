@@ -4,6 +4,6 @@
 </p>
 <a href="/todos/{{ todo._id }}/edit">edit</a>   {{!-- 修改 --}}
 <a href="/">back</a>    {{!-- 返回 --}}
-<form action="/todos/{{ todo._id }}/delete" method="POST" style="display: inline;"> {{!-- 刪除 --}}
+<form action="/todos/{{ todo._id }}?_method=DELETE" method="POST" style="display: inline;"> {{!-- 刪除 --}}
   <button type="submit">delete</button>
 </form>

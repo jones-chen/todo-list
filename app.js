@@ -4,7 +4,7 @@ const exphbs = require('express-handlebars')
 const methodOverride = require('method-override') 
 const mongoose = require('mongoose') // 載入 mongoose
 const Todo = require('./models/todo') // 載入 Todo model
-
+const routes = require('./routes')   //就是上面的index.js ，相對目錄，也可以簡寫成require('./routes') ，會自動讀取index.js
 const app = express()
 const port = 3000
 
@@ -39,15 +39,18 @@ app.engine('hbs', exphbs({ defaultLayout: 'main' , extname : '.hbs'}))  //讀取
 app.set('view engine', 'hbs') //根據這裡的設定當作副檔名
 
 
+
 // 四、設定路由
+app.use(routes)
+
 // 首頁
-app.get('/', (req, res) => {
-  Todo.find() // 取出 Todo model 裡的所有資料，也可以傳入參數
-    .lean() // 把 Mongoose 的 Model 物件轉換成乾淨的 JavaScript 資料陣列
-    .sort({name:'asc'}) //排序 desc
-    .then(todos => res.render('index', { todos:todos })) // 取得陣列叫todos，將資料傳給 index 樣板
-    .catch(error => console.error(error)) // 錯誤處理
-})
+// app.get('/', (req, res) => {
+//   Todo.find() // 取出 Todo model 裡的所有資料，也可以傳入參數
+//     .lean() // 把 Mongoose 的 Model 物件轉換成乾淨的 JavaScript 資料陣列
+//     .sort({name:'asc'}) //排序 desc
+//     .then(todos => res.render('index', { todos:todos })) // 取得陣列叫todos，將資料傳給 index 樣板
+//     .catch(error => console.error(error)) // 錯誤處理
+// })
 // 建立：進入 New To do
 app.get('/todos/new', (req, res) => {
   return res.render('new')

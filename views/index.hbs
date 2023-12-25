@@ -4,7 +4,8 @@
   {{#each todos}}
     <li>
       {{this.name}}
-      <a href="./todos/{{this._id}}">detail</a>  {{!-- /todos/5e9460ebe0174f4a734ce12a --}}
+      <a href="./todos/{{ this._id }}">detail</a>  {{!-- /todos/5e9460ebe0174f4a734ce12a --}}
+      <a href="./todos/{{ this._id }}/edit">edit</a>
     </li>
   {{/each}}
 </ul>

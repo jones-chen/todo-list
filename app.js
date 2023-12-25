@@ -41,27 +41,48 @@ app.get('/', (req, res) => {
     .then(todos => res.render('index', { todos:todos })) // 取得陣列叫todos，將資料傳給 index 樣板
     .catch(error => console.error(error)) // 錯誤處理
 })
-// 建立新Todo - 進入 New To do
+// 建立：進入 New To do
 app.get('/todos/new', (req, res) => {
   return res.render('new')
 })
-// 建立新Todo - 送出按鈕，接住表單資料，把資料送往資料庫。這個步驟就是 CRUD 裡的 Create 動作。
+// 建立：按下送出按鈕，接住表單資料，把資料送往資料庫。這個步驟就是 CRUD 裡的 Create 動作。
 app.post('/todos', (req, res) => {
   const name = req.body.name
   const todo = new Todo({name: name})  //資料庫的model在伺服器端的實體
-  
-  //將資料寫回伺服器端
-  return todo.save()
+  return todo.save()  //將資料寫回伺服器端
   .then(todo => res.redirect('/'))
   .catch(error => console.error(error))
 })
 
-//點選Detail - 進入detail頁面
+// 查看：進入 Detail頁面
 app.get('/todos/:id', (req, res) => {  //動態參數
   const id = req.params.id 
   return Todo.findById(id)
     .lean()
     .then((todo) => res.render('detail', { todo:todo })) //todo為抓出來的那筆資料
+    .catch(error => console.log(error))
+})
+
+// 編輯：進入 edit頁面
+app.get('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id)
+    .lean()
+    .then((todo) => res.render('edit', { todo }))
+    .catch(error => console.log(error))
+})
+
+// 編輯：將edit頁面的參數丟入資料庫存檔
+app.post('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  const name = req.body.name  //更新後的資料
+  return Todo.findById(id)
+    .then(todo => {
+      todo.name = name
+      return todo.save() //return不能省，先存入資料庫後，再進行下個then
+    })
+    .then(()=> res.redirect(`/todos/${id}`)) //導入查看頁面
+    
     .catch(error => console.log(error))
 })
 
